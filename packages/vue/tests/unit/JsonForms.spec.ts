@@ -475,6 +475,51 @@ describe('JsonForms.vue', () => {
     expect(core.errors).toHaveLength(0);
   });
 
+  it('unwraps a data, schema and ui schema that come from reactive state', () => {
+    const data = { number: 5.5 };
+    const schema = {
+      type: 'object',
+      properties: { number: { type: 'number' } },
+    };
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/number',
+    };
+    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+    // An application that keeps these values in `reactive()` gives proxies of
+    // them.
+    const state = reactive({ data, schema, uischema });
+    const core = mountInParent({ ...state, renderers }).core();
+
+    expect(core.data).toBe(data);
+    expect(core.schema).toBe(schema);
+    expect(core.uischema).toBe(uischema);
+  });
+
+  it('unwraps a new data, schema and ui schema that come from reactive state', async () => {
+    const renderers: JsonFormsUISchemaRegistryEntry[] = [];
+    const form = mountInParent({ data: { number: 5.5 }, renderers });
+    const data = { number: 6 };
+    const schema = {
+      type: 'object',
+      properties: { number: { type: 'number' } },
+    };
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/number',
+    };
+    const state = reactive({ data, schema, uischema });
+    form.state.data = state.data;
+    form.state.schema = state.schema;
+    form.state.uischema = state.uischema;
+    await nextTick();
+
+    const core = form.core();
+    expect(core.data).toBe(data);
+    expect(core.schema).toBe(schema);
+    expect(core.uischema).toBe(uischema);
+  });
+
   it('adds no reactivity to a generated ajv', () => {
     const data = { number: 5.5 };
     const renderers: JsonFormsUISchemaRegistryEntry[] = [];

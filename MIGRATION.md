@@ -43,11 +43,11 @@ This should not affect you except if you explicitly use this method in custom re
 `JsonForms` of `@jsonforms/vue` now keeps its state shallow.
 Vue no longer makes a proxy for each node of the `schema`, the `uischema`, the `renderers`, the `cells` and the form data, which makes a large form much faster to mount.
 
-JSON Forms gives the value of a prop to the state as it is.
-An application that keeps such a value out of deep reactive state thus no longer needs `markRaw` for it, and Vue no longer gives the "received a Component that was made a reactive object" warning for a renderer set.
-An application that keeps such a value in `reactive()` state gives a proxy of the value to the form.
-Use `shallowRef`, `shallowReactive` or `markRaw` for a value that must stay unwrapped, such as a renderer set, for which Vue gives the warning above.
-The one exception is `ajv`, which the form always unwraps, because Ajv cannot compile a schema through a proxy of itself.
+The form unwraps a proxy of the `data`, the `schema`, the `uischema` and `ajv` with `toRaw`, and gives the other props to the state as they are.
+JSON Forms writes no flag on the objects of the application.
+An application that keeps the `renderers`, the `cells` or the `uischemas` out of deep reactive state thus no longer needs `markRaw` for them, and Vue no longer gives the "received a Component that was made a reactive object" warning for a renderer set.
+An application that keeps them in `reactive()` state gives a proxy of them to the form.
+Use `shallowRef`, `shallowReactive` or `markRaw` for a renderer set, for which Vue gives the warning above.
 
 The form data that a renderer gets is no longer a proxy.
 A change of the data thus needs a `dispatch` of an `update` action, which the `useJsonFormsControl` composition and its relatives do for you through `handleChange`.
