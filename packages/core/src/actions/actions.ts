@@ -25,6 +25,7 @@
 
 import type AJV from 'ajv';
 import type { ErrorObject } from 'ajv';
+import type { FormValidatorFactory } from '../util/formValidator';
 import { JsonSchema, UISchemaElement } from '../models';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
@@ -146,6 +147,8 @@ export interface UpdateCoreAction {
 
 export interface InitActionOptions {
   ajv?: AJV;
+  /** Creates the Form Validator for the schema. Takes precedence over `ajv`. */
+  validator?: FormValidatorFactory;
   validationMode?: ValidationMode;
   additionalErrors?: ErrorObject[];
 }
