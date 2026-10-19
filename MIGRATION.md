@@ -49,6 +49,21 @@ If you apply custom styling that relies on the previous `Grid`-based DOM structu
 Furthermore, if you use exported method `renderLayoutElements`, it no longer wraps children in `Grid` items for direction `column`.
 This should not affect you except if you explicitly use this method in custom renderers.
 
+### Vue keeps the state of a form shallow
+
+`JsonForms` of `@jsonforms/vue` now keeps its state shallow.
+Vue no longer makes a proxy for each node of the `schema`, the `uischema`, the `renderers`, the `cells` and the form data, which makes a large form much faster to mount.
+
+The form unwraps a proxy of the `data`, the `schema`, the `uischema` and `ajv` with `toRaw`, and gives the other props to the state as they are.
+JSON Forms writes no flag on the objects of the application.
+An application that keeps the `renderers`, the `cells` or the `uischemas` out of deep reactive state thus no longer needs `markRaw` for them, and Vue no longer gives the "received a Component that was made a reactive object" warning for a renderer set.
+An application that keeps them in `reactive()` state gives a proxy of them to the form.
+Use `shallowRef`, `shallowReactive` or `markRaw` for a renderer set, for which Vue gives the warning above.
+
+The form data that a renderer gets is no longer a proxy.
+A change of the data thus needs a `dispatch` of an `update` action, which the `useJsonFormsControl` composition and its relatives do for you through `handleChange`.
+A custom renderer that writes into the data object directly, for example with a `v-model` on a nested field, must use `handleChange` instead.
+
 ## Migrating to JSON Forms 3.8
 
 ### `Translator` type changed from overloaded signatures to a generic conditional type
