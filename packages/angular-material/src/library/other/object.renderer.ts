@@ -24,7 +24,13 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
   JsonFormsControlWithDetail,
   JsonFormsModule,
@@ -32,27 +38,25 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import {
   ControlWithDetailProps,
-  findUISchema,
   Generate,
   GroupLayout,
   isObjectControl,
+  OwnPropsOfRenderer,
   RankedTester,
   rankWith,
-  setReadonly,
   UISchemaElement,
 } from '@jsonforms/core';
 import cloneDeep from 'lodash/cloneDeep';
+import { createDetailUiSchemaResolver } from '../util/detail-uischema';
 
 @Component({
   selector: 'ObjectRenderer',
   template: `
     <mat-card class="object-layout" appearance="outlined">
       <jsonforms-outlet
-        [uischema]="detailUiSchema"
-        [schema]="scopedSchema"
-        [path]="propsPath"
-      >
-      </jsonforms-outlet>
+        *ngIf="renderProps"
+        [renderProps]="renderProps"
+      ></jsonforms-outlet>
     </mat-card>
   `,
   styles: [
@@ -63,40 +67,50 @@ import cloneDeep from 'lodash/cloneDeep';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [JsonFormsModule, MatCardModule],
+  imports: [CommonModule, JsonFormsModule, MatCardModule],
 })
 export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   detailUiSchema: UISchemaElement;
+  /** Bound as a whole, as the outlet only re-dispatches when this is set. */
+  renderProps: OwnPropsOfRenderer;
+  private resolveDetailUiSchema = createDetailUiSchemaResolver();
+  private changeDetectorRef = inject(ChangeDetectorRef);
   mapAdditionalProps(props: ControlWithDetailProps) {
-    this.detailUiSchema = findUISchema(
-      props.uischemas,
-      props.schema,
+    const detailUiSchema = this.resolveDetailUiSchema(
+      props,
+      this.isEnabled(),
       props.uischema.scope,
-      props.path,
       () => {
         const newSchema = cloneDeep(props.schema);
         // delete unsupported operators
         delete newSchema.oneOf;
         delete newSchema.anyOf;
         delete newSchema.allOf;
-        return Generate.uiSchema(
+        const generated = Generate.uiSchema(
           newSchema,
           'Group',
           undefined,
-          this.rootSchema
+          props.rootSchema
         );
-      },
-      props.uischema,
-      props.rootSchema
+        if (isEmpty(props.path)) {
+          generated.type = 'VerticalLayout';
+        } else {
+          (generated as GroupLayout).label = startCase(props.path);
+        }
+        return generated;
+      }
     );
-    if (isEmpty(props.path)) {
-      this.detailUiSchema.type = 'VerticalLayout';
-    } else {
-      (this.detailUiSchema as GroupLayout).label = startCase(props.path);
+    if (detailUiSchema === this.detailUiSchema) {
+      return;
     }
-    if (!this.isEnabled()) {
-      setReadonly(this.detailUiSchema);
-    }
+    this.detailUiSchema = detailUiSchema;
+    this.renderProps = {
+      uischema: detailUiSchema,
+      schema: props.schema,
+      path: props.path,
+    };
+    // OnPush: nothing below reports the new detail, so schedule the check
+    this.changeDetectorRef.markForCheck();
   }
 }
 export const ObjectControlRendererTester: RankedTester = rankWith(
