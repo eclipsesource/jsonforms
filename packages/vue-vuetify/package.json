@@ -93,13 +93,13 @@
     "ajv-keywords": "^5.1.0",
     "core-js": "^3.9.1",
     "cross-env": "^10.1.0",
-    "dayjs": "^1.10.6",
+    "dayjs": "^1.11.11",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "eslint-plugin-vue-scoped-css": "^2.8.0",
     "jsdom": "^27.2.0",
     "json-refs": "3.0.15",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "maska": "^2.1.11",
     "monaco-editor": "^0.49.0",
     "npm-run-all2": "^6.1.2",
@@ -119,6 +119,6 @@
     "vue": "^3.5.17",
     "vue-eslint-parser": "^9.4.2",
     "vue-tsc": "^2.2.0",
-    "vuetify": "^3.11.0"
+    "vuetify": "^3.12.8"
   }
 }

@@ -32,18 +32,16 @@ import {
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
 import React, { Fragment, useMemo } from 'react';
-import {
-  FormHelperText,
-  Grid,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import FormHelperText from '@mui/material/FormHelperText';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import {
   ArrayLayoutProps,
   ControlElement,
@@ -57,7 +55,9 @@ import {
   encode,
   ArrayTranslations,
 } from '@jsonforms/core';
-import { Delete, ArrowDownward, ArrowUpward } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
+import ArrowDownward from '@mui/icons-material/ArrowDownward';
+import ArrowUpward from '@mui/icons-material/ArrowUpward';
 
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';

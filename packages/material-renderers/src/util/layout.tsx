@@ -34,7 +34,8 @@ import {
   OwnPropsOfRenderer,
 } from '@jsonforms/core';
 import { JsonFormsDispatch, useJsonForms } from '@jsonforms/react';
-import { Grid, Stack } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 
 export const renderLayoutElements = (
   elements: UISchemaElement[],

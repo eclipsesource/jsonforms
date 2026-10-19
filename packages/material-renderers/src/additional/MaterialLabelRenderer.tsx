@@ -25,7 +25,7 @@
 import React from 'react';
 import { LabelProps, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { withJsonFormsLabelProps } from '@jsonforms/react';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 /**
  * Default tester for a label.

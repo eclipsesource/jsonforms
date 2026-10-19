@@ -24,7 +24,10 @@
 */
 import React, { useState, useMemo } from 'react';
 import merge from 'lodash/merge';
-import { Button, Step, StepButton, Stepper } from '@mui/material';
+import Button from '@mui/material/Button';
+import Step from '@mui/material/Step';
+import StepButton from '@mui/material/StepButton';
+import Stepper from '@mui/material/Stepper';
 import {
   and,
   Categorization,

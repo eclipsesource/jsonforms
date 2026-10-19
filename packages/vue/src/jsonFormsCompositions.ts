@@ -40,6 +40,7 @@ import {
   Translator,
 } from '@jsonforms/core';
 import type Ajv from 'ajv';
+import isEqualWith from 'lodash/isEqualWith';
 import {
   PropType,
   computed,
@@ -148,6 +149,88 @@ export interface ControlProps extends RendererProps {
   uischema: ControlElement;
 }
 
+/**
+ * Returns `true` for an instance of a class that has no `Symbol.toStringTag`.
+ * `isEqual` compares such an instance by its own keys. Thus it finds two
+ * instances equal when their contents are in private fields. `isEqual` compares
+ * `Date`, `Map`, `Set` and other values with a known tag by their contents, and
+ * it finds values with an unknown tag (for example `Temporal`) equal only when
+ * they are identical.
+ */
+const isClassInstance = (value: unknown): boolean => {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    Object.prototype.toString.call(value) !== '[object Object]'
+  ) {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype !== Object.prototype && prototype !== null;
+};
+
+/**
+ * Compares two values structurally with `isEqual`, but compares class
+ * instances by identity. Thus the result is `true` only when the values are
+ * deep-equal.
+ */
+const isDeepEqual = (a: unknown, b: unknown): boolean =>
+  isEqualWith(a, b, (x: unknown, y: unknown) =>
+    isClassInstance(x) || isClassInstance(y) ? x === y : undefined
+  );
+
+/**
+ * The keys of a bindings object that are compared by identity. For these keys
+ * the core gives the same object when the value does not change: it replaces
+ * the data immutably, and it resolves a schema to a part of the root schema.
+ * Thus a structural compare can find an equal value only when the application
+ * gives a copy, and the values can be large. All other keys are compared with
+ * `isDeepEqual`, because the core or a renderer makes a new but equal value on
+ * each change, for example a filtered `childErrors` array or a clone of a UI
+ * schema element.
+ */
+const identityKeys = new Set(['data', 'schema', 'rootSchema']);
+
+/**
+ * Returns `previous` when `next` has the same keys, and each value is equal to
+ * the value in `previous`. Otherwise returns `next`.
+ */
+const reuseIfEqual = <T extends object>(
+  previous: T | undefined,
+  next: T
+): T => {
+  if (previous === undefined) {
+    return next;
+  }
+  const previousKeys = Object.keys(previous);
+  const nextKeys = Object.keys(next);
+  const equal =
+    previousKeys.length === nextKeys.length &&
+    nextKeys.every(
+      (key) =>
+        Object.prototype.hasOwnProperty.call(previous, key) &&
+        (identityKeys.has(key)
+          ? (previous as Record<string, unknown>)[key] ===
+            (next as Record<string, unknown>)[key]
+          : isDeepEqual(
+              (previous as Record<string, unknown>)[key],
+              (next as Record<string, unknown>)[key]
+            ))
+    );
+  return equal ? previous : next;
+};
+
+/**
+ * A `computed` for a bindings object. Each change of the JSON Forms state
+ * recomputes the bindings of all renderers, and the getter returns a new
+ * object each time. Vue compares a computed value by identity, thus without
+ * this wrapper each change re-renders all renderers in the form. When the new
+ * bindings are equal to the previous bindings, this computed keeps the
+ * previous object, and Vue does not trigger the dependents.
+ */
+const stableComputed = <T extends object>(getter: () => T): ComputedRef<T> =>
+  computed((previous?: T) => reuseIfEqual(previous, getter()));
+
 export type Required<T> = T extends object
   ? { [P in keyof T]-?: NonNullable<T[P]> }
   : T;
@@ -188,7 +271,7 @@ export function useControl<
   const dispatch = useDispatch();
 
   const id = ref<string | undefined>(undefined);
-  const control = computed(() => ({
+  const control = stableComputed(() => ({
     ...props,
     ...stateMap({ jsonforms }, props),
     id: id.value,
@@ -416,7 +499,7 @@ export const useJsonFormsRenderer = (props: RendererProps) => {
   );
 
   const rootSchema = computed(() => rawProps.value.rootSchema);
-  const renderer = computed(() => {
+  const renderer = stableComputed(() => {
     const { rootSchema: _rootSchema, ...rest } = rawProps.value;
     return rest;
   });

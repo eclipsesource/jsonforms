@@ -1,5 +1,12 @@
 <template>
-  <component :is="determinedRenderer" v-bind="renderer">
+  <!-- Without slots, bind no slots: forwarded slots are dynamic, and dynamic
+  slots make Vue render the child again each time this component renders. -->
+  <component
+    :is="determinedRenderer"
+    v-if="!hasSlots()"
+    v-bind="renderer"
+  ></component>
+  <component :is="determinedRenderer" v-else v-bind="renderer">
     <!-- Forward all slots dynamically -->
     <template v-for="(_, slotName) in $slots" :key="slotName" #[slotName]>
       <slot :name="slotName"></slot>
@@ -42,6 +49,12 @@ export default defineComponent({
       } else {
         return renderer.renderer;
       }
+    },
+  },
+  methods: {
+    // A method, not a computed value: `$slots` is not reactive.
+    hasSlots(): boolean {
+      return Object.keys(this.$slots).length > 0;
     },
   },
 });
