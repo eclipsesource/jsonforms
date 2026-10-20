@@ -35,6 +35,7 @@ import {
   JsonFormsTheme,
   WithInputProps,
   useDebouncedChange,
+  useInputAdornments,
   useInputComponent,
   useFocus,
 } from '../util';
@@ -97,6 +98,9 @@ export const MuiInputText = React.memo(function MuiInputText(
   const onPointerLeave = () => setShowAdornment(false);
 
   const theme: JsonFormsTheme = useTheme();
+  const { endAdornment, ...adornmentProps } = useInputAdornments(
+    appliedUiSchemaOptions
+  );
 
   const closeStyle = {
     background:
@@ -104,6 +108,19 @@ export const MuiInputText = React.memo(function MuiInputText(
       theme.palette.background.default,
     borderRadius: '50%',
   };
+
+  const isClearable = showAdornment && enabled && data !== undefined;
+  // With an end adornment, the clear button stays in the layout so it never covers the adornment
+  const clearButtonStyle: React.CSSProperties = endAdornment
+    ? {
+        display: enabled ? 'flex' : 'none',
+        visibility: isClearable ? 'visible' : 'hidden',
+      }
+    : {
+        display: isClearable ? 'flex' : 'none',
+        position: 'absolute',
+        right: 0,
+      };
 
   return (
     <InputComponent
@@ -123,26 +140,20 @@ export const MuiInputText = React.memo(function MuiInputText(
       error={!isValid}
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
+      {...adornmentProps}
       endAdornment={
-        <InputAdornment
-          position='end'
-          style={{
-            display:
-              !showAdornment || !enabled || data === undefined
-                ? 'none'
-                : 'flex',
-            position: 'absolute',
-            right: 0,
-          }}
-        >
-          <IconButton
-            aria-label='Clear input field'
-            onClick={onClear}
-            size='large'
-          >
-            <Close style={closeStyle} />
-          </IconButton>
-        </InputAdornment>
+        <>
+          {endAdornment}
+          <InputAdornment position='end' style={clearButtonStyle}>
+            <IconButton
+              aria-label='Clear input field'
+              onClick={onClear}
+              size='large'
+            >
+              <Close style={closeStyle} />
+            </IconButton>
+          </InputAdornment>
+        </>
       }
       inputComponent={inputComponent}
     />
