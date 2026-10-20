@@ -29,7 +29,16 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import merge from 'lodash/merge';
 import { TranslateProps } from '@jsonforms/react';
-import { i18nDefaults, WithInputProps, WithSelectProps } from '../util';
+import {
+  i18nDefaults,
+  InputAdornmentSx,
+  useInputAdornments,
+  WithInputProps,
+  WithSelectProps,
+} from '../util';
+
+// MUI positions the dropdown arrow absolutely, so it would cover the end adornment otherwise
+const adornmentSx: InputAdornmentSx = { endAdornmentSx: { mr: 4 } };
 
 export const MuiSelect = React.memo(function MuiSelect(
   props: EnumCellProps &
@@ -55,6 +64,10 @@ export const MuiSelect = React.memo(function MuiSelect(
     multiple,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const adornmentProps = useInputAdornments(
+    appliedUiSchemaOptions,
+    adornmentSx
+  );
   const noneOptionLabel = useMemo(
     () => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path }),
     [t, schema, uischema, path]
@@ -72,6 +85,7 @@ export const MuiSelect = React.memo(function MuiSelect(
       fullWidth={true}
       multiple={multiple || false}
       error={!isValid}
+      {...adornmentProps}
     >
       {[
         <MenuItem value={''} key='jsonforms.enum.none'>

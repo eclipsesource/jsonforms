@@ -27,6 +27,7 @@ import { CellProps, Formatted, WithClassname } from '@jsonforms/core';
 import merge from 'lodash/merge';
 import {
   useDebouncedChange,
+  useInputAdornments,
   useInputComponent,
   WithInputProps,
   useFocus,
@@ -51,6 +52,7 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
   const InputComponent = useInputComponent();
   const maxLength = schema.maxLength;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const adornmentProps = useInputAdornments(appliedUiSchemaOptions);
   let inputProps;
   if (appliedUiSchemaOptions.restrict) {
     inputProps = { maxLength: maxLength };
@@ -90,6 +92,7 @@ export const MuiInputNumberFormat = React.memo(function MuiInputNumberFormat(
       fullWidth={!appliedUiSchemaOptions.trim || maxLength === undefined}
       inputProps={inputProps}
       error={!isValid}
+      {...adornmentProps}
     />
   );
 });
