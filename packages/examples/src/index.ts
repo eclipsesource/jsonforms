@@ -26,6 +26,7 @@ import * as issue_1884 from './examples/1884';
 import * as issue_1948 from './examples/1948';
 import * as additionalErrors from './examples/additional-errors';
 import * as additionalProperties from './examples/additional-properties';
+import * as adornments from './examples/adornments';
 import * as allOf from './examples/allOf';
 import * as anyOf from './examples/anyOf';
 import * as anyOfOneOfAllOfResolve from './examples/anyOf-oneOf-allOf-resolve';
@@ -92,6 +93,7 @@ import * as jsonschema from './examples/jsonschema';
 export {
   additionalErrors,
   additionalProperties,
+  adornments,
   allOf,
   anyOf,
   anyOfOneOfAllOfResolve,
