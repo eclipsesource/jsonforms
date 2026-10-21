@@ -29,7 +29,7 @@ const filteredExamples = computed(() => {
       <template v-slot:prepend>
         <VuetifyLogo width="40" height="40" />
       </template>
-      <v-list-item-title class="text-headline-small">
+      <v-list-item-title class="text-title-large">
         Examples
       </v-list-item-title>
       <v-list-item-subtitle> Vuetify Renderers </v-list-item-subtitle>
