@@ -73,7 +73,7 @@ describe('OneOfRenderer.vue', () => {
       });
     expect(found).toBeTruthy();
 
-    // Cleanup: Close the dialog and flush pending Vuetify animations 
+    // Cleanup: Close the dialog and flush pending Vuetify animations
     // to prevent JSDOM from throwing an error during teardown.
     wrapper.getComponent(OneOfControlRenderer).vm.cancel();
     await wrapper.vm.$nextTick();
