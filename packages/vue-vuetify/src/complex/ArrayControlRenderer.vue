@@ -50,7 +50,7 @@
     </v-card-title>
     <v-card-text v-bind="vuetifyProps('v-card-text')">
       <v-container justify-space-around align-content-center>
-        <v-row justify="center">
+        <v-row class="justify-center">
           <v-table
             class="array-container flex"
             v-bind="vuetifyProps('v-table')"

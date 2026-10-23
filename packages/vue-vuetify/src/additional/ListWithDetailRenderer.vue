@@ -125,8 +125,7 @@
                         class="ma-0"
                         :aria-label="control.translations.downAriaLabel"
                         :disabled="
-                          index >= dataLength - 1 ||
-                          !isControlEditable(control)
+                          index >= dataLength - 1 || !isControlEditable(control)
                         "
                         :class="styles.listWithDetail.itemMoveDown"
                         @click="moveDownClick($event, index)"
@@ -172,7 +171,9 @@
         </v-list>
       </v-col>
       <v-col v-if="selectedIndex === undefined" class="flex-grow-1">
-        <span class="text-h6">{{ control.translations.noSelection }}</span>
+        <span class="text-title-large">{{
+          control.translations.noSelection
+        }}</span>
       </v-col>
       <v-col
         v-else
