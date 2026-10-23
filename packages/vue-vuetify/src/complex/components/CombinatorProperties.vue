@@ -54,18 +54,26 @@ export default defineComponent({
       props.schema,
       props.combinatorKeyword,
     ) as JsonSchema;
-    const foundUISchema: UISchemaElement = Generate.uiSchema(
+
+    // 1. Explicitly acknowledge the generator can return null for empty schemas
+    const foundUISchema = Generate.uiSchema(
       otherProps,
       'VerticalLayout',
       undefined,
       props.rootSchema,
-    );
+    ) as UISchemaElement | null;
 
-    const isLayout = (uischema: UISchemaElement): uischema is Layout =>
-      Object.prototype.hasOwnProperty.call(uischema, 'elements');
+    // 2. Implement the bulletproof type guard
+    const isLayout = (uischema: unknown): uischema is Layout =>
+      uischema !== null &&
+      typeof uischema === 'object' &&
+      'elements' in uischema;
 
+    // 3. Address the null bug at the logical level before invoking the guard
     const isLayoutWithElements =
-      isLayout(foundUISchema) && foundUISchema.elements.length > 0;
+      foundUISchema !== null &&
+      isLayout(foundUISchema) &&
+      foundUISchema.elements.length > 0;
 
     return {
       otherProps,
