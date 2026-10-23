@@ -10,6 +10,7 @@ exports[`ArrayControlRenderer.vue > should render component and match snapshot 1
           <!---->
           <div class="v-progress-linear__background"></div>
           <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+          <!---->
           <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
             <div class="v-progress-linear__indeterminate">
               <!---->

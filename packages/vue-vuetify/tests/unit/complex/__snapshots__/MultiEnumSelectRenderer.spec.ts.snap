@@ -14,6 +14,7 @@ exports[`MultiEnumSelectRenderer.vue > with enum schema > should render componen
                 <!---->
                 <div class="v-progress-linear__background"></div>
                 <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+                <!---->
                 <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
                   <div class="v-progress-linear__indeterminate">
                     <!---->
@@ -83,6 +84,7 @@ exports[`MultiEnumSelectRenderer.vue > with oneOf schema > should render compone
                 <!---->
                 <div class="v-progress-linear__background"></div>
                 <div class="v-progress-linear__buffer" style="width: 0%;"></div>
+                <!---->
                 <transition-stub name="fade-transition" appear="false" persisted="false" css="true">
                   <div class="v-progress-linear__indeterminate">
                     <!---->
