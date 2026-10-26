@@ -97,13 +97,11 @@ import {
   VStepperActions,
   VStepperHeader,
   VStepperItem,
+  VStepperVertical,
+  VStepperVerticalItem,
   VStepperWindow,
   VStepperWindowItem,
 } from 'vuetify/components';
-import {
-  VStepperVertical,
-  VStepperVerticalItem,
-} from 'vuetify/labs/VStepperVertical';
 import { useVuetifyLayout } from '../util';
 
 const layoutRenderer = defineComponent({
@@ -133,7 +131,7 @@ const layoutRenderer = defineComponent({
           category,
           originalIndex,
         }))
-        .filter((e) => e.category.value.visible)
+        .filter((e) => e.category.value.visible),
     );
 
     watch(
@@ -142,13 +140,13 @@ const layoutRenderer = defineComponent({
         if (
           visibleCategories.length > 0 &&
           !visibleCategories.some(
-            (entry) => entry.originalIndex + 1 === activeCategory.value
+            (entry) => entry.originalIndex + 1 === activeCategory.value,
           )
         ) {
           activeCategory.value = visibleCategories[0].originalIndex + 1;
         }
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     return {

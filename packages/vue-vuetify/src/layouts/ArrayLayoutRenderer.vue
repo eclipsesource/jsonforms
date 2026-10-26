@@ -62,7 +62,7 @@
         align-content-center
         :class="styles.arrayList.container"
       >
-        <v-row justify="center">
+        <v-row class="justify-center">
           <v-expansion-panels
             accordion
             v-bind="expansionPanelsProps"
@@ -86,7 +86,7 @@
                         : ''
                     }`"
                   >
-                    <v-col v-if="!hideAvatar" align-self="center" class="pl-0">
+                    <v-col v-if="!hideAvatar" class="pl-0 align-self-center">
                       <validation-badge
                         overlap
                         bordered
@@ -101,12 +101,11 @@
                     </v-col>
 
                     <v-col
-                      align-self="center"
-                      :class="`pl-0 text-truncate ${styles.arrayList.itemLabel}`"
+                      :class="`align-self-center pl-0 text-truncate ${styles.arrayList.itemLabel}`"
                       >{{ childLabelForIndex(index) }}</v-col
                     >
                     <v-col
-                      align-self="center"
+                      class="align-self-center"
                       v-if="appliedOptions.showSortButtons"
                     >
                       <v-tooltip location="bottom">
@@ -134,7 +133,7 @@
                       </v-tooltip>
                     </v-col>
                     <v-col
-                      align-self="center"
+                      class="align-self-center"
                       v-if="appliedOptions.showSortButtons"
                     >
                       <v-tooltip location="bottom">
@@ -162,7 +161,7 @@
                         {{ control.translations.down }}
                       </v-tooltip>
                     </v-col>
-                    <v-col align-self="center">
+                    <v-col class="align-self-center">
                       <v-tooltip location="bottom">
                         <template v-slot:activator="{ props }">
                           <v-btn
@@ -237,7 +236,7 @@
       @click:outside="suggestToDelete = null"
     >
       <v-card>
-        <v-card-title class="text-h5">
+        <v-card-title class="text-headline-small">
           {{ control.translations.deleteDialogTitle }}
         </v-card-title>
 

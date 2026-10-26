@@ -6,7 +6,7 @@
           <v-expansion-panel-title class="py-0 px-0">
             <v-container class="py-0">
               <v-row>
-                <v-col align-self="center" class="pl-0"
+                <v-col class="pl-0 align-self-center"
                   ><v-select
                     v-if="mixedRenderInfos"
                     v-disabled-icon-focus
@@ -31,7 +31,7 @@
                   >
                   </v-select
                 ></v-col>
-                <v-col cols="3" align-self="center" class="text-truncate">{{
+                <v-col cols="3" class="text-truncate align-self-center">{{
                   computedLabel
                 }}</v-col>
               </v-row>
