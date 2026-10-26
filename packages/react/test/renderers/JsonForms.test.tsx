@@ -50,6 +50,7 @@ import {
 } from '@jsonforms/core';
 import { isEqual } from 'lodash';
 import Enzyme, { mount, shallow } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import {
   JsonForms,
@@ -1236,4 +1237,60 @@ test('JsonForms middleware should update state if modified', async () => {
   }
 
   wrapper.unmount();
+});
+
+test('JsonForms should flush a pending onChange callback when unmounted', () => {
+  const onChangeHandler = jest.fn();
+  const TestInputRenderer = withJsonFormsControlProps((props) => (
+    <input onChange={(ev) => props.handleChange('foo', ev.target.value)} />
+  ));
+  const renderers = [
+    {
+      tester: () => 10,
+      renderer: TestInputRenderer,
+    },
+  ];
+
+  jest.useFakeTimers();
+  let wrapper: ReturnType<typeof mount> | undefined;
+  try {
+    wrapper = mount(
+      <JsonForms
+        data={fixture.data}
+        uischema={fixture.uischema}
+        schema={fixture.schema}
+        onChange={onChangeHandler}
+        renderers={renderers}
+      />
+    );
+
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+    expect(onChangeHandler).toHaveBeenCalledTimes(1);
+    onChangeHandler.mockClear();
+
+    wrapper.find('input').simulate('change', {
+      target: {
+        value: 'Pending Value',
+      },
+    });
+    act(() => {
+      wrapper?.unmount();
+    });
+    wrapper = undefined;
+
+    expect(onChangeHandler).toHaveBeenCalledTimes(1);
+    expect(onChangeHandler.mock.calls[0][0].data).toEqual({
+      foo: 'Pending Value',
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+    expect(onChangeHandler).toHaveBeenCalledTimes(1);
+  } finally {
+    wrapper?.unmount();
+    jest.useRealTimers();
+  }
 });

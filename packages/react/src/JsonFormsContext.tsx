@@ -263,6 +263,12 @@ export const JsonFormsStateProvider = ({
     debouncedEmit({ data: core.data, errors: core.errors });
   }, [core.data, core.errors]);
 
+  useEffect(() => {
+    return () => {
+      debouncedEmit.flush();
+    };
+  }, [debouncedEmit]);
+
   return (
     <JsonFormsContext.Provider value={contextValue}>
       {children}
