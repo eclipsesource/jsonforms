@@ -54,23 +54,18 @@ export default defineComponent({
       props.schema,
       props.combinatorKeyword,
     ) as JsonSchema;
-
-    const foundUISchema = Generate.uiSchema(
+    const foundUISchema: UISchemaElement = Generate.uiSchema(
       otherProps,
       'VerticalLayout',
       undefined,
       props.rootSchema,
     );
 
-    const isLayout = (uischema: unknown): uischema is Layout =>
-      uischema !== null &&
-      typeof uischema === 'object' &&
-      'elements' in uischema;
+    const isLayout = (uischema: UISchemaElement): uischema is Layout =>
+      Object.prototype.hasOwnProperty.call(uischema, 'elements');
 
     const isLayoutWithElements =
-      foundUISchema !== null &&
-      isLayout(foundUISchema) &&
-      foundUISchema.elements.length > 0;
+      isLayout(foundUISchema) && foundUISchema.elements.length > 0;
 
     return {
       otherProps,
