@@ -62,15 +62,15 @@ jobs:
 
       - name: 'Adjust PeerDependencies'
         run: |
-          cd packages/angular && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../angular-material && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/angular="${{ github.event.inputs.next_version }}"
-          cd ../examples && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../material-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
-          cd ../react && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../vanilla-renderers && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/react="${{ github.event.inputs.next_version }}"
-          cd ../vue && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}"
-          cd ../vue-vanilla && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
-          cd ../vue-vuetify && pnpm pkg set peerDependencies.@jsonforms/core="${{ github.event.inputs.next_version }}" && pnpm pkg set peerDependencies.@jsonforms/vue="${{ github.event.inputs.next_version }}"
+          cd packages/angular && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}"
+          cd ../angular-material && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}" && pnpm pkg set "peerDependencies['@jsonforms/angular']=${{ github.event.inputs.next_version }}"
+          cd ../examples && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}"
+          cd ../material-renderers && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}" && pnpm pkg set "peerDependencies['@jsonforms/react']=${{ github.event.inputs.next_version }}"
+          cd ../react && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}"
+          cd ../vanilla-renderers && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}" && pnpm pkg set "peerDependencies['@jsonforms/react']=${{ github.event.inputs.next_version }}"
+          cd ../vue && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}"
+          cd ../vue-vanilla && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}" && pnpm pkg set "peerDependencies['@jsonforms/vue']=${{ github.event.inputs.next_version }}"
+          cd ../vue-vuetify && pnpm pkg set "peerDependencies['@jsonforms/core']=${{ github.event.inputs.next_version }}" && pnpm pkg set "peerDependencies['@jsonforms/vue']=${{ github.event.inputs.next_version }}"
 
       - name: 'Tag and Commit'
         run: |
