@@ -28,3 +28,4 @@ export * from './theme';
 export * from './debounce';
 export * from './focus';
 export * from './i18nDefaults';
+export * from './adornment';

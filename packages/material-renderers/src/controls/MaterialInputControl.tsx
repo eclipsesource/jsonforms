@@ -33,7 +33,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import merge from 'lodash/merge';
-import { useFocus, useInputVariant } from '../util';
+import { isAdornmentText, useFocus, useInputVariant } from '../util';
 
 export interface WithInput {
   input: any;
@@ -86,6 +86,11 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
       <InputLabel
         htmlFor={id + '-input'}
         error={!isValid}
+        shrink={
+          isAdornmentText(appliedUiSchemaOptions.startAdornment)
+            ? true
+            : undefined
+        }
         required={showAsRequired(
           required,
           appliedUiSchemaOptions.hideRequiredAsterisk
