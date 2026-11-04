@@ -1,0 +1,33 @@
+name: Website
+
+# Build the documentation website to catch breakage early. This job only
+# verifies that the site compiles; it never deploys. Production is published
+# separately against the latest stable release (see publish.yaml + Netlify).
+on:
+  push:
+    paths:
+      - 'website/**'
+  pull_request:
+    paths:
+      - 'website/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: website/.nvmrc
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build:current

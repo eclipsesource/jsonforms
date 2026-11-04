@@ -1,0 +1,72 @@
+---
+id: ref-resolving
+title: Ref Resolving
+description: Resolve JSON Schema $refs
+---
+
+:::caution ATTENTION
+
+With version 3.0 of JSON Forms, we no longer include `json-schema-ref-parser` within the core package.
+The old documentation for JSON Forms < 3.0 can be found [here](deprecated/ref-resolving-legacy).
+For a migration guide, have a look [here](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
+
+:::
+
+JSON Forms is able to resolve basic JSON Schema `$ref` pointers which is sufficient for most use cases.
+In case of complex reference setups or references pointing to external resources the schema needs to be resolved before handing it over to JSON Forms.
+We recommend using a library like [`json-refs`](https://github.com/whitlockjc/json-refs/tree/master/docs) or [`json-schema-ref-parser`](https://apitools.dev/json-schema-ref-parser/) for these use cases.
+
+Below you can find an example on how to use `json-refs` and `json-schema-ref-parser`:
+
+```js
+import React, { useState } from 'react';
+import { JsonForms } from '@jsonforms/react';
+import { materialCells, materialRenderers } from '@jsonforms/material-renderers';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
+import JsonRefs from 'json-refs';
+
+import mySchemaWithReferences from 'myschema.json';
+
+const yourRemoteSchemaResolver = {
+  order: 1,
+  canRead: function(file) {
+    return file.url.indexOf('yourRemoteSchemaIdentifier') !== -1;
+  },
+  read: function() {
+    return JSON.stringify(yourSchemaObject);
+  },
+};
+const refParserOptions = {
+  dereference: {
+    circular: false
+  },
+  resolve: {
+    foo: yourRemoteSchemaResolver
+}
+
+function App() {
+  const [data, setData] = useState(initialData);
+  const [resolvedSchema, setSchema] = useState();
+
+  useEffect(() => {
+    $RefParser.dereference(mySchemaWithReferences, refParserOptions).then(res => setSchema(res.$schema));
+    // or
+    JsonRefs.resolveRefs(mySchemaWithReferences).then(res => setSchema(res.resolved));
+  },[]);
+
+  if(resolvedSchema === undefined) {
+    return <div> Loading... </div>
+  }
+
+  return (
+    <JsonForms
+      schema={resolvedSchema}
+      uischema={uischema}
+      data={data}
+      renderers={materialRenderers}
+      cells={materialCells}
+      onChange={({ data, _errors }) => setData(data)}
+    />
+  );
+}
+```
