@@ -143,7 +143,6 @@ export const MuiInputText = React.memo(function MuiInputText(
       {...adornmentProps}
       endAdornment={
         <>
-          {endAdornment}
           <InputAdornment position='end' style={clearButtonStyle}>
             <IconButton
               aria-label='Clear input field'
@@ -153,6 +152,7 @@ export const MuiInputText = React.memo(function MuiInputText(
               <Close style={closeStyle} />
             </IconButton>
           </InputAdornment>
+          {endAdornment}
         </>
       }
       inputComponent={inputComponent}

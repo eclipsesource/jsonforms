@@ -219,6 +219,28 @@ describe('Material input adornments', () => {
       wrapper.update();
     };
 
+    it.each([
+      ['empty', undefined, true, false],
+      ['populated', 'foo', true, false],
+      ['hovered', 'foo', true, true],
+      ['disabled', 'foo', false, false],
+    ])(
+      'keeps the end adornment after the clear button when %s',
+      (_state, data, enabled, hovered) => {
+        wrapper = renderControl({ type: 'string' }, adornments, data, enabled);
+        if (hovered) {
+          hover();
+        }
+        const endAdornments = wrapper
+          .find('.MuiInputAdornment-positionEnd')
+          .hostNodes();
+        expect(
+          endAdornments.at(0).find('button[aria-label="Clear input field"]')
+        ).toHaveLength(1);
+        expect(endAdornments.at(1).text()).toBe('kg');
+      }
+    );
+
     it('reserves space for the hidden clear button instead of overlaying', () => {
       wrapper = renderControl({ type: 'string' }, adornments, 'foo');
       expect(clearButtonStyle()).not.toHaveProperty('position', 'absolute');
