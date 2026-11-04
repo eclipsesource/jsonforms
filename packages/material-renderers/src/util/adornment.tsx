@@ -32,7 +32,7 @@ export interface AdornmentOptions {
   endAdornment?: unknown;
 }
 
-export interface InputAdornmentProps {
+export interface AdornedInputProps {
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
   notched?: boolean;
@@ -57,10 +57,10 @@ export const isAdornmentText = (value: unknown): value is string =>
 export const useInputAdornments = (
   options: AdornmentOptions,
   { startAdornmentSx, endAdornmentSx }: InputAdornmentSx = {}
-): InputAdornmentProps => {
+): AdornedInputProps => {
   const variant = useInputVariant();
   const { startAdornment, endAdornment } = options;
-  const adornmentProps: InputAdornmentProps = {};
+  const adornmentProps: AdornedInputProps = {};
   if (isAdornmentText(startAdornment)) {
     adornmentProps.startAdornment = (
       <InputAdornment position='start' sx={startAdornmentSx}>
