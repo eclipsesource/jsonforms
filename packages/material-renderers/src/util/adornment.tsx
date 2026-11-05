@@ -25,7 +25,6 @@
 import React, { ReactNode } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import { SxProps, Theme } from '@mui/material/styles';
-import { useInputVariant } from './theme';
 
 export interface AdornmentOptions {
   startAdornment?: unknown;
@@ -35,7 +34,6 @@ export interface AdornmentOptions {
 export interface AdornedInputProps {
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
-  notched?: boolean;
 }
 
 export interface InputAdornmentSx {
@@ -49,16 +47,11 @@ export const isAdornmentText = (value: unknown): value is string =>
 /**
  * Creates the start and end adornments configured via the `startAdornment`
  * and `endAdornment` UI schema options.
- *
- * Renderers place the label outside of the input, so MUI cannot detect a
- * start adornment on its own. The outlined variant therefore needs an
- * explicit `notched` to leave room for the shrunk label.
  */
 export const useInputAdornments = (
   options: AdornmentOptions,
   { startAdornmentSx, endAdornmentSx }: InputAdornmentSx = {}
 ): AdornedInputProps => {
-  const variant = useInputVariant();
   const { startAdornment, endAdornment } = options;
   const adornmentProps: AdornedInputProps = {};
   if (isAdornmentText(startAdornment)) {
@@ -67,9 +60,6 @@ export const useInputAdornments = (
         {startAdornment}
       </InputAdornment>
     );
-    if (variant === 'outlined') {
-      adornmentProps.notched = true;
-    }
   }
   if (isAdornmentText(endAdornment)) {
     adornmentProps.endAdornment = (

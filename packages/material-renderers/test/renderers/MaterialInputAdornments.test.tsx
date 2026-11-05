@@ -30,6 +30,7 @@ import { ControlElement, JsonSchema7 } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   materialCells,
   materialRenderers,
@@ -173,10 +174,36 @@ describe('Material input adornments', () => {
   });
 
   describe('label', () => {
+    it.each(['standard', 'outlined', 'filled'] as const)(
+      'shrinks the label for a rendered start adornment with the %s variant',
+      (variant) => {
+        wrapper = mount(
+          <ThemeProvider
+            theme={createTheme({
+              components: { MuiTextField: { defaultProps: { variant } } },
+            })}
+          >
+            <JsonForms
+              schema={{ type: 'string' }}
+              uischema={{ type: 'Control', scope: '#', options: adornments }}
+              data=''
+              renderers={materialRenderers}
+            />
+          </ThemeProvider>
+        );
+        expect(wrapper.find('label').hasClass('MuiInputLabel-shrink')).toBe(
+          true
+        );
+        if (variant === 'outlined') {
+          expect(wrapper.find('NotchedOutline').prop('notched')).toBe(true);
+        }
+      }
+    );
+
     it('shrinks an empty field label when a start adornment is set', () => {
       wrapper = renderControl({ type: 'string' }, adornments);
       expect(wrapper.find('label').hasClass('MuiInputLabel-shrink')).toBe(true);
-      expect(wrapper.find(OutlinedInput).props().notched).toBe(true);
+      expect(wrapper.find('NotchedOutline').prop('notched')).toBe(true);
     });
 
     it('keeps an empty field label unshrunk without a start adornment', () => {
