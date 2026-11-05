@@ -39,6 +39,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
 import merge from 'lodash/merge';
 import { useFocus } from '../util/focus';
+import { useInputAdornments } from '../util/adornment';
 
 export interface WithOptionLabel {
   getOptionLabel?(option: EnumOption): string;
@@ -79,6 +80,9 @@ export const MuiAutocomplete = (
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [inputValue, setInputValue] = React.useState(data ?? '');
   const [focused, onFocus, onBlur] = useFocus();
+  const { startAdornment, endAdornment } = useInputAdornments(
+    appliedUiSchemaOptions
+  );
 
   const findOption = options.find((o) => o.value === data) ?? null;
 
@@ -133,6 +137,17 @@ export const MuiAutocomplete = (
             fullWidth={!appliedUiSchemaOptions.trim}
             slotProps={{
               ...params.slotProps,
+              input: {
+                ...params.slotProps.input,
+                startAdornment:
+                  startAdornment ?? params.slotProps.input.startAdornment,
+                endAdornment: (
+                  <>
+                    {endAdornment}
+                    {params.slotProps.input.endAdornment}
+                  </>
+                ),
+              },
               inputLabel: {
                 ...params.slotProps.inputLabel,
                 ...(data ? { shrink: true } : undefined),
