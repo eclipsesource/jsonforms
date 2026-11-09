@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { act } from 'react-dom/test-utils';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
@@ -30,6 +31,10 @@ import { ControlElement, JsonSchema7 } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Autocomplete, {
+  AutocompleteRenderInputParams,
+} from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   materialCells,
@@ -214,12 +219,172 @@ describe('Material input adornments', () => {
     });
   });
 
+  describe.each(['standard', 'outlined', 'filled'] as const)(
+    '%s select suffix',
+    (variant) => {
+      it.each([
+        [4, false, 14],
+        [4, true, 14],
+        [8, false, 14],
+        [8, true, 14],
+        [4, false, 20],
+        [4, true, 20],
+      ])(
+        'keeps the arrow before the suffix with spacing %s, start adornment %s and font size %s',
+        (spacing, withStartAdornment, fontSize) => {
+          const theme = createTheme({
+            spacing,
+            typography: { fontSize },
+            components: {
+              MuiSelect: { defaultProps: { variant } },
+              MuiTextField: { defaultProps: { variant } },
+            },
+          });
+          wrapper = mount(
+            <ThemeProvider theme={theme}>
+              <JsonForms
+                schema={enumSchema}
+                uischema={{
+                  type: 'Control',
+                  scope: '#',
+                  options: {
+                    autocomplete: false,
+                    endAdornment: 'kg',
+                    ...(withStartAdornment ? { startAdornment: '€' } : {}),
+                  },
+                }}
+                data='110'
+                renderers={materialRenderers}
+              />
+            </ThemeProvider>
+          );
+          const arrow = wrapper.find('svg.MuiSelect-icon').getDOMNode();
+          const select = wrapper
+            .find('[role="combobox"]')
+            .hostNodes()
+            .getDOMNode();
+          // JSDOM does not reliably apply specificity over MUI's input margin reset.
+          const margins = Array.from(document.styleSheets)
+            .flatMap((sheet) => Array.from(sheet.cssRules))
+            .filter(
+              (rule): rule is CSSStyleRule =>
+                rule instanceof CSSStyleRule &&
+                rule.selectorText.endsWith(' .MuiSelect-select') &&
+                select.matches(rule.selectorText)
+            )
+            .map((rule) => rule.style.getPropertyValue('margin-right'));
+          expect(margins).toContain(
+            `-${window.getComputedStyle(arrow).fontSize}`
+          );
+          const suffix = wrapper
+            .find('.MuiInputAdornment-positionEnd')
+            .hostNodes()
+            .getDOMNode();
+          expect(
+            arrow.compareDocumentPosition(suffix) &
+              Node.DOCUMENT_POSITION_FOLLOWING
+          ).toBeTruthy();
+          expect(window.getComputedStyle(suffix).marginRight).not.toBe(
+            `${spacing * 4}px`
+          );
+          wrapper
+            .find('[role="combobox"]')
+            .hostNodes()
+            .simulate('mouseDown', { button: 0 });
+          expect(
+            wrapper.find('[role="combobox"]').hostNodes().prop('aria-expanded')
+          ).toBe('true');
+        }
+      );
+    }
+  );
+
   describe('built-in end adornments', () => {
-    it('keeps the autocomplete popup button next to the end adornment', () => {
-      wrapper = renderControl(enumSchema, adornments);
+    it('preserves MUI input props and adornments when adding custom adornments', () => {
+      wrapper = renderControl(enumSchema, adornments, '110');
+      const params = wrapper
+        .find(TextField)
+        .props() as AutocompleteRenderInputParams;
+      const providedStart = <span>Provided prefix</span>;
+      const providedEnd = <button>Provided controls</button>;
+      const renderInput = wrapper
+        .find(Autocomplete)
+        .prop<(params: AutocompleteRenderInputParams) => React.ReactElement>(
+          'renderInput'
+        );
+      const input = renderInput({
+        ...params,
+        slotProps: {
+          ...params.slotProps,
+          input: {
+            ...params.slotProps.input,
+            startAdornment: providedStart,
+            endAdornment: providedEnd,
+          },
+        },
+      });
+      const inputProps = input.props.slotProps.input;
+      expect(inputProps.ref).toBe(params.slotProps.input.ref);
+      expect(input.props.slotProps.htmlInput).toBe(params.slotProps.htmlInput);
+      expect(renderToStaticMarkup(inputProps.startAdornment)).toContain(
+        'Provided prefix'
+      );
+      expect(renderToStaticMarkup(inputProps.startAdornment)).toContain('€');
+      expect(inputProps.endAdornment.props.children[0]).toBe(providedEnd);
+    });
+
+    const autocompleteActions = () =>
+      Array.from(
+        wrapper
+          .find('.MuiInputBase-root')
+          .hostNodes()
+          .getDOMNode()
+          .querySelectorAll(
+            '.MuiAutocomplete-clearIndicator, .MuiInputAdornment-positionEnd, .MuiAutocomplete-popupIndicator'
+          )
+      );
+
+    it.each([enumSchema, oneOfEnumSchema])(
+      'keeps the autocomplete buttons together before the suffix',
+      (property) => {
+        wrapper = renderControl(property, adornments, '110');
+        const actions = autocompleteActions();
+        expect(actions).toHaveLength(3);
+        expect(
+          actions[0].classList.contains('MuiAutocomplete-clearIndicator')
+        ).toBe(true);
+        expect(actions[2].textContent).toBe('kg');
+        expect(
+          actions[1].classList.contains('MuiAutocomplete-popupIndicator')
+        ).toBe(true);
+        expect(actions[2].closest('button')).toBeNull();
+        expect(actions[0].parentElement).toBe(actions[1].parentElement);
+        expect(actions[0].parentElement).not.toBe(actions[2].parentElement);
+        const popupButton = wrapper.find(
+          'button.MuiAutocomplete-popupIndicator'
+        );
+        popupButton.simulate('click');
+        expect(wrapper.find('input').prop('aria-expanded')).toBe(true);
+        popupButton.simulate('click');
+        expect(wrapper.find('input').prop('aria-expanded')).toBe(false);
+        wrapper.find('button.MuiAutocomplete-clearIndicator').simulate('click');
+        expect(wrapper.find('input').prop('value')).toBe('');
+        expect(adornmentTexts(wrapper, 'End')).toEqual(['kg']);
+      }
+    );
+
+    it.each([
+      ['empty', undefined, true],
+      ['disabled', '110', false],
+    ])('keeps the suffix after the popup when %s', (_state, data, enabled) => {
+      wrapper = renderControl(enumSchema, adornments, data, enabled);
+      const actions = autocompleteActions();
+      expect(actions).toHaveLength(2);
+      expect(actions[1].textContent).toBe('kg');
+      expect((actions[0] as HTMLButtonElement).disabled).toBe(!enabled);
       expect(
-        wrapper.find('.MuiAutocomplete-popupIndicator').hostNodes()
-      ).toHaveLength(1);
+        actions[0].classList.contains('MuiAutocomplete-popupIndicator')
+      ).toBe(true);
     });
 
     it('keeps the anyOf datalist next to the end adornment', () => {

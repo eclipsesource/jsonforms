@@ -31,14 +31,10 @@ import merge from 'lodash/merge';
 import { TranslateProps } from '@jsonforms/react';
 import {
   i18nDefaults,
-  InputAdornmentSx,
   useInputAdornments,
   WithInputProps,
   WithSelectProps,
 } from '../util';
-
-// MUI positions the dropdown arrow absolutely, so it would cover the end adornment otherwise
-const adornmentSx: InputAdornmentSx = { endAdornmentSx: { mr: 4 } };
 
 export const MuiSelect = React.memo(function MuiSelect(
   props: EnumCellProps &
@@ -64,10 +60,7 @@ export const MuiSelect = React.memo(function MuiSelect(
     multiple,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
-  const adornmentProps = useInputAdornments(
-    appliedUiSchemaOptions,
-    adornmentSx
-  );
+  const adornmentProps = useInputAdornments(appliedUiSchemaOptions);
   const noneOptionLabel = useMemo(
     () => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path }),
     [t, schema, uischema, path]
@@ -86,6 +79,17 @@ export const MuiSelect = React.memo(function MuiSelect(
       multiple={multiple || false}
       error={!isValid}
       {...adornmentProps}
+      sx={
+        adornmentProps.endAdornment
+          ? {
+              '& .MuiSelect-icon': { position: 'static' },
+              // shortcut: overlaps MUI's default arrow with the clickable select; revisit for custom icon sizes.
+              '& .MuiSelect-select': {
+                marginRight: (theme) => theme.typography.pxToRem(-24),
+              },
+            }
+          : undefined
+      }
     >
       {[
         <MenuItem value={''} key='jsonforms.enum.none'>

@@ -139,12 +139,18 @@ export const MuiAutocomplete = (
               ...params.slotProps,
               input: {
                 ...params.slotProps.input,
-                startAdornment:
-                  startAdornment ?? params.slotProps.input.startAdornment,
+                startAdornment: startAdornment ? (
+                  <>
+                    {startAdornment}
+                    {params.slotProps.input.startAdornment}
+                  </>
+                ) : (
+                  params.slotProps.input.startAdornment
+                ),
                 endAdornment: (
                   <>
-                    {endAdornment}
                     {params.slotProps.input.endAdornment}
+                    {endAdornment}
                   </>
                 ),
               },
@@ -158,6 +164,19 @@ export const MuiAutocomplete = (
             focused={focused}
           />
         )}
+        sx={
+          endAdornment
+            ? {
+                '&&& .MuiAutocomplete-inputRoot': { paddingRight: '9px' },
+                '&&& .MuiInput-root': { paddingRight: 0 },
+                '& .MuiAutocomplete-endAdornment': {
+                  position: 'static',
+                  transform: 'none',
+                  flexShrink: 0,
+                },
+              }
+            : undefined
+        }
         renderOption={renderOption}
         filterOptions={filterOptions}
       />
