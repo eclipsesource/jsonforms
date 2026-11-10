@@ -61,6 +61,6 @@ jobs:
 
       - name: Upload Coveralls Report
         if: success() && matrix.os == 'ubuntu-latest'
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
