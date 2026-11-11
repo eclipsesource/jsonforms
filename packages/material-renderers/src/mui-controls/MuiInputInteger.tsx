@@ -27,6 +27,7 @@ import { CellProps, WithClassname } from '@jsonforms/core';
 import merge from 'lodash/merge';
 import {
   useDebouncedChange,
+  useInputAdornments,
   useInputComponent,
   WithInputProps,
   useFocus,
@@ -56,6 +57,7 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
   const inputProps = { step: '1' };
 
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const adornmentProps = useInputAdornments(appliedUiSchemaOptions);
 
   const [inputValue, onChange] = useDebouncedChange(
     handleChange,
@@ -83,6 +85,7 @@ export const MuiInputInteger = React.memo(function MuiInputInteger(
       inputProps={inputProps}
       fullWidth={true}
       error={!isValid}
+      {...adornmentProps}
     />
   );
 });

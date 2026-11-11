@@ -44,6 +44,7 @@ import {
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import { initCore } from './util';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -98,6 +99,26 @@ describe('Material input control', () => {
     const validation = wrapper.find('p').first();
     expect(validation.props().className).toContain('MuiFormHelperText-root');
     expect(validation.children()).toHaveLength(0);
+  });
+
+  it('does not shrink the label for a custom input that ignores adornment options', () => {
+    const control: ControlElement = {
+      ...uischema,
+      options: { startAdornment: '€' },
+    };
+    const CustomInput = () => <OutlinedInput value='' />;
+    const CustomControl = withJsonFormsControlProps((props: ControlProps) => (
+      <MaterialInputControl {...props} input={CustomInput} />
+    ));
+    wrapper = mount(
+      <JsonFormsStateProvider
+        initState={{ core: initCore(schema, control, {}) }}
+      >
+        <CustomControl schema={schema} uischema={control} />
+      </JsonFormsStateProvider>
+    );
+
+    expect(wrapper.find('label').hasClass('MuiInputLabel-shrink')).toBe(false);
   });
 
   it('should render without label', () => {

@@ -40,6 +40,7 @@ import merge from 'lodash/merge';
 import React, { useMemo } from 'react';
 import {
   useDebouncedChange,
+  useInputAdornments,
   useInputComponent,
   WithInputProps,
   useFocus,
@@ -77,6 +78,9 @@ const MuiAutocompleteInputText = (
   const appliedUiSchemaOptions = useMemo(
     () => merge({}, config, uischema.options),
     [config, uischema.options]
+  );
+  const { endAdornment, ...adornmentProps } = useInputAdornments(
+    appliedUiSchemaOptions
   );
   const inputProps: InputBaseComponentProps = useMemo(() => {
     let propMemo: InputBaseComponentProps = {};
@@ -122,7 +126,13 @@ const MuiAutocompleteInputText = (
       fullWidth={!appliedUiSchemaOptions.trim || maxLength === undefined}
       inputProps={inputProps}
       error={!isValid}
-      endAdornment={dataList}
+      {...adornmentProps}
+      endAdornment={
+        <>
+          {dataList}
+          {endAdornment}
+        </>
+      }
     />
   );
 };

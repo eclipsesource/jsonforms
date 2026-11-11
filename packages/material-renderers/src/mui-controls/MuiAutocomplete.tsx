@@ -39,6 +39,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import TextField from '@mui/material/TextField';
 import merge from 'lodash/merge';
 import { useFocus } from '../util/focus';
+import { useInputAdornments } from '../util/adornment';
 
 export interface WithOptionLabel {
   getOptionLabel?(option: EnumOption): string;
@@ -79,6 +80,9 @@ export const MuiAutocomplete = (
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
   const [inputValue, setInputValue] = React.useState(data ?? '');
   const [focused, onFocus, onBlur] = useFocus();
+  const { startAdornment, endAdornment } = useInputAdornments(
+    appliedUiSchemaOptions
+  );
 
   const findOption = options.find((o) => o.value === data) ?? null;
 
@@ -133,6 +137,23 @@ export const MuiAutocomplete = (
             fullWidth={!appliedUiSchemaOptions.trim}
             slotProps={{
               ...params.slotProps,
+              input: {
+                ...params.slotProps.input,
+                startAdornment: startAdornment ? (
+                  <>
+                    {startAdornment}
+                    {params.slotProps.input.startAdornment}
+                  </>
+                ) : (
+                  params.slotProps.input.startAdornment
+                ),
+                endAdornment: (
+                  <>
+                    {params.slotProps.input.endAdornment}
+                    {endAdornment}
+                  </>
+                ),
+              },
               inputLabel: {
                 ...params.slotProps.inputLabel,
                 ...(data ? { shrink: true } : undefined),
@@ -143,6 +164,20 @@ export const MuiAutocomplete = (
             focused={focused}
           />
         )}
+        sx={
+          endAdornment
+            ? {
+                // Match MUI's outlined root padding (9px); &&& overrides its button-space rules.
+                '&&& .MuiAutocomplete-inputRoot': { paddingRight: '9px' },
+                '&&& .MuiInput-root': { paddingRight: 0 },
+                '& .MuiAutocomplete-endAdornment': {
+                  position: 'static',
+                  transform: 'none',
+                  flexShrink: 0,
+                },
+              }
+            : undefined
+        }
         renderOption={renderOption}
         filterOptions={filterOptions}
       />

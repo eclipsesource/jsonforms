@@ -29,7 +29,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import merge from 'lodash/merge';
 import { TranslateProps } from '@jsonforms/react';
-import { i18nDefaults, WithInputProps, WithSelectProps } from '../util';
+import {
+  i18nDefaults,
+  useInputAdornments,
+  WithInputProps,
+  WithSelectProps,
+} from '../util';
 
 export const MuiSelect = React.memo(function MuiSelect(
   props: EnumCellProps &
@@ -55,6 +60,7 @@ export const MuiSelect = React.memo(function MuiSelect(
     multiple,
   } = props;
   const appliedUiSchemaOptions = merge({}, config, uischema.options);
+  const adornmentProps = useInputAdornments(appliedUiSchemaOptions);
   const noneOptionLabel = useMemo(
     () => t('enum.none', i18nDefaults['enum.none'], { schema, uischema, path }),
     [t, schema, uischema, path]
@@ -72,6 +78,18 @@ export const MuiSelect = React.memo(function MuiSelect(
       fullWidth={true}
       multiple={multiple || false}
       error={!isValid}
+      {...adornmentProps}
+      sx={
+        adornmentProps.endAdornment
+          ? {
+              '& .MuiSelect-icon': { position: 'static' },
+              // shortcut: negative margin equals the default arrow width so arrow clicks reach the select; adjust for a custom IconComponent or SvgIcon size.
+              '& .MuiSelect-select': {
+                marginRight: (theme) => theme.typography.pxToRem(-24),
+              },
+            }
+          : undefined
+      }
     >
       {[
         <MenuItem value={''} key='jsonforms.enum.none'>
