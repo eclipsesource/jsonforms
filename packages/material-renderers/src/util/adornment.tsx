@@ -47,6 +47,10 @@ export const isAdornmentText = (value: unknown): value is string =>
 /**
  * Creates the start and end adornments configured via the `startAdornment`
  * and `endAdornment` UI schema options.
+ *
+ * The optional `startAdornmentSx` and `endAdornmentSx` are applied to the
+ * created `InputAdornment`s. Custom renderers can use them to adjust the
+ * adornment styling, e.g. spacing next to their own built-in buttons.
  */
 export const useInputAdornments = (
   options: AdornmentOptions,

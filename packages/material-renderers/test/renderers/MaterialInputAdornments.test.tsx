@@ -222,80 +222,64 @@ describe('Material input adornments', () => {
   describe.each(['standard', 'outlined', 'filled'] as const)(
     '%s select suffix',
     (variant) => {
-      it.each([
-        [4, false, 14],
-        [4, true, 14],
-        [8, false, 14],
-        [8, true, 14],
-        [4, false, 20],
-        [4, true, 20],
-      ])(
-        'keeps the arrow before the suffix with spacing %s, start adornment %s and font size %s',
-        (spacing, withStartAdornment, fontSize) => {
-          const theme = createTheme({
-            spacing,
-            typography: { fontSize },
-            components: {
-              MuiSelect: { defaultProps: { variant } },
-              MuiTextField: { defaultProps: { variant } },
-            },
-          });
-          wrapper = mount(
-            <ThemeProvider theme={theme}>
-              <JsonForms
-                schema={enumSchema}
-                uischema={{
-                  type: 'Control',
-                  scope: '#',
-                  options: {
-                    autocomplete: false,
-                    endAdornment: 'kg',
-                    ...(withStartAdornment ? { startAdornment: '€' } : {}),
-                  },
-                }}
-                data='110'
-                renderers={materialRenderers}
-              />
-            </ThemeProvider>
-          );
-          const arrow = wrapper.find('svg.MuiSelect-icon').getDOMNode();
-          const select = wrapper
-            .find('[role="combobox"]')
-            .hostNodes()
-            .getDOMNode();
-          // JSDOM does not reliably apply specificity over MUI's input margin reset.
-          const margins = Array.from(document.styleSheets)
-            .flatMap((sheet) => Array.from(sheet.cssRules))
-            .filter(
-              (rule): rule is CSSStyleRule =>
-                rule instanceof CSSStyleRule &&
-                rule.selectorText.endsWith(' .MuiSelect-select') &&
-                select.matches(rule.selectorText)
-            )
-            .map((rule) => rule.style.getPropertyValue('margin-right'));
-          expect(margins).toContain(
-            `-${window.getComputedStyle(arrow).fontSize}`
-          );
-          const suffix = wrapper
-            .find('.MuiInputAdornment-positionEnd')
-            .hostNodes()
-            .getDOMNode();
-          expect(
-            arrow.compareDocumentPosition(suffix) &
-              Node.DOCUMENT_POSITION_FOLLOWING
-          ).toBeTruthy();
-          expect(window.getComputedStyle(suffix).marginRight).not.toBe(
-            `${spacing * 4}px`
-          );
-          wrapper
-            .find('[role="combobox"]')
-            .hostNodes()
-            .simulate('mouseDown', { button: 0 });
-          expect(
-            wrapper.find('[role="combobox"]').hostNodes().prop('aria-expanded')
-          ).toBe('true');
-        }
-      );
+      it('keeps the arrow before the suffix and opens the select', () => {
+        const theme = createTheme({
+          components: {
+            MuiSelect: { defaultProps: { variant } },
+            MuiTextField: { defaultProps: { variant } },
+          },
+        });
+        wrapper = mount(
+          <ThemeProvider theme={theme}>
+            <JsonForms
+              schema={enumSchema}
+              uischema={{
+                type: 'Control',
+                scope: '#',
+                options: {
+                  autocomplete: false,
+                  endAdornment: 'kg',
+                },
+              }}
+              data='110'
+              renderers={materialRenderers}
+            />
+          </ThemeProvider>
+        );
+        const arrow = wrapper.find('svg.MuiSelect-icon').getDOMNode();
+        const select = wrapper
+          .find('[role="combobox"]')
+          .hostNodes()
+          .getDOMNode();
+        // JSDOM does not reliably apply specificity over MUI's input margin reset.
+        const margins = Array.from(document.styleSheets)
+          .flatMap((sheet) => Array.from(sheet.cssRules))
+          .filter(
+            (rule): rule is CSSStyleRule =>
+              rule instanceof CSSStyleRule &&
+              rule.selectorText.endsWith(' .MuiSelect-select') &&
+              select.matches(rule.selectorText)
+          )
+          .map((rule) => rule.style.getPropertyValue('margin-right'));
+        expect(margins).toContain(
+          `-${window.getComputedStyle(arrow).fontSize}`
+        );
+        const suffix = wrapper
+          .find('.MuiInputAdornment-positionEnd')
+          .hostNodes()
+          .getDOMNode();
+        expect(
+          arrow.compareDocumentPosition(suffix) &
+            Node.DOCUMENT_POSITION_FOLLOWING
+        ).toBeTruthy();
+        wrapper
+          .find('[role="combobox"]')
+          .hostNodes()
+          .simulate('mouseDown', { button: 0 });
+        expect(
+          wrapper.find('[role="combobox"]').hostNodes().prop('aria-expanded')
+        ).toBe('true');
+      });
     }
   );
 

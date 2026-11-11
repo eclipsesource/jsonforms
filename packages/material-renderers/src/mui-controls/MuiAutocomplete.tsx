@@ -167,6 +167,7 @@ export const MuiAutocomplete = (
         sx={
           endAdornment
             ? {
+                // Match MUI's outlined root padding (9px); &&& overrides its button-space rules.
                 '&&& .MuiAutocomplete-inputRoot': { paddingRight: '9px' },
                 '&&& .MuiInput-root': { paddingRight: 0 },
                 '& .MuiAutocomplete-endAdornment': {

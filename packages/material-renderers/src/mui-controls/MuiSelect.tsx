@@ -83,7 +83,7 @@ export const MuiSelect = React.memo(function MuiSelect(
         adornmentProps.endAdornment
           ? {
               '& .MuiSelect-icon': { position: 'static' },
-              // shortcut: overlaps MUI's default arrow with the clickable select; revisit for custom icon sizes.
+              // shortcut: negative margin equals the default arrow width so arrow clicks reach the select; adjust for a custom IconComponent or SvgIcon size.
               '& .MuiSelect-select': {
                 marginRight: (theme) => theme.typography.pxToRem(-24),
               },
