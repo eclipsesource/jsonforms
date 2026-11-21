@@ -1,0 +1,266 @@
+---
+id: dynamic-enum
+title: Dynamic Renderers
+description: This tutorial describes how to create a dynamic enum
+---
+
+import { WithRegionRenderer } from '../../../src/components/docs/tutorials/dynamic-enum';
+
+
+In this tutorial, you will learn how to handle dynamic data in React using [custom renderers](./custom-renderers), React Context, and the `useJsonForms` hook.
+This approach allows you to build flexible and interactive forms that adapt to user selections and API responses.
+
+### Scenario
+
+Imagine a form where users need to provide their location by selecting a country, a region and a city.
+The options for countries and regions are fetched from an API.
+The available regions depend on the selected country.
+To address those requirements, we'll create custom renderers for country and region.
+
+<WithRegionRenderer />
+
+#### Schema
+
+To begin, let's introduce the corresponding JSON schema.
+We have created an object with properties for country, region, and city.
+In our example, the schema also includes a property `x-url`, which specifies the entry point of the corresponding API.
+Both `country` and `region` have a property `x-endpoint`, indicating the endpoint from which the data should be fetched.
+Additionally, they have a field specifying which fields depend on the input.
+In the case of the `country` field, the `region` and `city` fields depend on it and will get reset, if the value of the `country` changes.
+The `city` field, in turn, is dependent on the `region` field.
+
+```js
+{
+  "type": "object",
+  "x-url": "www.api.com",
+  "properties": {
+    "country": {
+      "type": "string",
+      "x-endpoint": "countries",
+      "x-dependents": ["region", "city"]
+    },
+    "region": {
+      "type": "string",
+      "x-endpoint": "regions",
+      "x-dependents": ["city"]
+    },
+    "city": {
+      "type": "string"
+    }
+  }
+}
+```
+
+### Accessing Schema Data and Initializing the React Context
+
+In this step we will access the data from the schema and initialize the React context.
+
+#### Accessing the API URL from Schema
+
+To access the URL defined from the schema we can simply access  the `x-url` attribute.
+
+```js
+const url = schema['x-url'];
+```
+
+#### Initializing the React Context
+
+Now that we have access to the API URL, we can use React Context to make this data available across our renderers.
+[React Context](https://react.dev/learn/passing-data-deeply-with-context) lets you share values across the component tree without having to pass props down manually at every level.
+To set up the React Context for your API service, create it in your application as follows:
+
+```js
+export const APIContext = React.createContext(new API(url));
+
+const App = () => {
+
+  ...
+  <JsonForms/>
+}
+```
+
+#### Accessing the API context
+
+Access the API service using the context:
+
+```js
+const api = React.useContext(APIContext);
+```
+
+Changing the context's value will trigger a re-render of components that use it.
+
+### The Country Renderer
+
+The core of the country renderer is a dropdown. Therefore, we can reuse the MaterialEnumControl from the React Material renderer set.
+To reuse material renderers, the Unwrapped renderers must be used. (more information regarding reusing renderers can be seen [here](./custom-renderers#reusing-existing-controls))
+
+```js
+import { Unwrapped, WithOptionLabel } from '@jsonforms/material-renderers';
+
+const { MaterialEnumControl } = Unwrapped;
+
+...
+
+<MaterialEnumControl
+  {...props}
+  options = {options}
+  handleChange = {handleChange}
+/>
+...
+```
+
+With the `MaterialEnumControl`in place the main question remains how to set the `options` and the `handleChange` attribute.
+To determine the available options, we need to access the API.
+And to implement the `handleChange` function, we need access to the `x-dependents` field in the schema.
+
+#### Accessing Schema Data
+
+The `x-endpoint` and `x-dependents` fields can be obtained from the schema object provided to the custom renderer via JSON Forms.
+Since these fields are not part of the standard JSON schema type in JSON Forms, we must add them to the schema's interface and access them as follows:
+
+```js
+type JsonSchemaWithDependenciesAndEndpoint = JsonSchema & {
+  'x-dependent': string[];
+  'x-endpoint': string;
+};
+
+const CountryControl = (
+  props: ControlProps & WithOptionLabel & TranslateProps
+) => {
+...
+
+  const schema = props.schema as JsonSchemaWithDependenciesAndEndpoint;
+  const endpoint = schema['x-endpoint'];
+  const dependent = schema['x-dependents'];
+...
+}
+```
+
+#### Country Renderer Implementation
+
+The country renderer uses the `APIContext` to query the API and fetch the available options.
+We utilize the `useEffect` hook to initialize the options.
+While waiting for the API response, we set the available options to empty and display a loading spinner.
+In the `handleChange` function, we set the new selected value and reset all dependent fields.
+When changing the country, both the region and city will be reset to `undefined`.
+
+```js
+import { Unwrapped, WithOptionLabel } from '@jsonforms/material-renderers';
+
+const { MaterialEnumControl } = Unwrapped;
+
+type JsonSchemaWithDependenciesAndEndpoint = JsonSchema & {
+  'x-dependent': string[];
+  'x-endpoint': string;
+};
+
+const CountryControl = (
+  props: ControlProps & WithOptionLabel & TranslateProps
+) => {
+  const { handleChange } = props;
+  const [options, setOptions] = useState<string[]>([]);
+  const api = React.useContext(APIContext);
+  const schema = props.schema as JsonSchemaDependenciesAndEndpoint;
+
+  const endpoint = schema['x-endpoint'];
+  const dependent: string[] = schema['x-dependents'] ? schema['x-dependents'] : [];
+
+  useEffect(() => {
+    api.get(endpoint).then((result) => {
+      setOptions(result);
+    });
+  }, []);
+
+  if (options.length === 0) {
+    return <CircularProgress />;
+  }
+
+  return (
+    <MaterialEnumControl
+      {...props}
+      handleChange={(path: string, value: any) => {
+        handleChange(path, value);
+        dependent.forEach((path) => {
+          handleChange(path, undefined);
+        });
+      }}
+      options={options.map((option) => {
+        return { label: option, value: option };
+      })}
+    />
+  );
+};
+
+export default withJsonFormsControlProps(
+  withTranslateProps(React.memo(CountryControl)),
+  false
+);
+```
+
+Now all that´s left to do is to [create a tester](./custom-renderers#2-create-a-tester) and [register](./custom-renderers#3-register-the-renderer) the new custom renderer in our application.
+
+### The Region Renderer
+
+The region renderer can be implemented similarly to the country renderer.
+It also accesses the API via the context and includes `x-endpoint` and `x-dependents` fields defined in its schema.
+However, the options, on the other hand, are also dependent on the selected country.
+JSON Forms provides the `useJsonForms` hook, enabling you to access form data and trigger component rerenders on data changes.
+Let's use this hook in our region renderer to access the selected country:
+
+```js
+import { Unwrapped, WithOptionLabel } from '@jsonforms/material-renderers';
+const { MaterialEnumControl } = Unwrapped;
+
+type JsonSchemaWithDependenciesAndEndpoint = JsonSchema & {
+  dependent: string[];
+  endpoint: string;
+};
+
+const RegionControl = (
+  props: ControlProps & WithOptionLabel & TranslateProps
+) => {
+  const schema = props.schema as JsonSchemaWithDependenciesAndEndpoint;
+  const { handleChange } = props;
+  const [options, setOptions] = useState<string[]>([]);
+  const api = React.useContext(APIContext);
+  const country = useJsonForms().core?.data.country;
+  const [previousCountry, setPreviousCountry] = useState<String>();
+
+  const endpoint = schema['x-endpoint'];
+  const dependent: string[] = schema['x-dependents'] ? schema['x-dependents'] : [];
+
+  if (previousCountry !== country) {
+    setOptions([]);
+    setPreviousCountry(country);
+    api.get(endpoint + '/' + country).then((result) => {
+      setOptions(result);
+    });
+  }
+
+  if (options.length === 0 && country !== undefined) {
+    return <CircularProgress />;
+  }
+
+  return (
+    <MaterialEnumControl
+      {...props}
+      handleChange={(path: string, value: any) => {
+        handleChange(path, value);
+        dependent.forEach((path) => {
+          handleChange(path, undefined);
+        });
+      }}
+      options={options.map((option) => {
+        return { label: option, value: option };
+      })}
+    />
+  );
+};
+
+export default withJsonFormsControlProps(
+  withTranslateProps(React.memo(RegionControl)),
+  false
+);
+```
+
+Again we need to create a [create a tester](./custom-renderers#2-create-a-tester) and [register](./custom-renderers#3-register-the-renderer) the new custom renderer.
