@@ -108,6 +108,22 @@ test('toDataPath replace all combinators', (t) => {
 test('toDataPath use of keywords', (t) => {
   t.is(toDataPath('#/properties/properties'), 'properties');
 });
+test('toDataPath keeps property names ending in then or else', (t) => {
+  t.is(
+    toDataPath('#/properties/something_else/properties/name'),
+    'something_else.name'
+  );
+  t.is(toDataPath('#/properties/strengthen/properties/x'), 'strengthen.x');
+});
+test('toDataPath keeps properties named like keywords', (t) => {
+  t.is(toDataPath('#/properties/then/properties/name'), 'then.name');
+  t.is(toDataPath('#/properties/else/properties/name'), 'else.name');
+  t.is(toDataPath('#/properties/anyOf/properties/0'), 'anyOf.0');
+  t.is(
+    toDataPath('/anyOf/1/then/properties/then/properties/else'),
+    'then.else'
+  );
+});
 test('toDataPath use of encoded paths', (t) => {
   const fooBar = encodeURIComponent('foo.bar');
   t.is(toDataPath(`#/properties/${fooBar}`), `${fooBar}`);
