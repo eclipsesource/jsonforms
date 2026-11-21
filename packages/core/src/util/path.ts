@@ -24,7 +24,6 @@
 */
 
 import isEmpty from 'lodash/isEmpty';
-import range from 'lodash/range';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
@@ -55,18 +54,29 @@ export { compose as composePaths };
  * @returns {string[]} an array containing only non-schema-specific segments
  */
 export const toDataPathSegments = (schemaPath: string): string[] => {
-  const s = schemaPath
-    .replace(/(anyOf|allOf|oneOf)\/[\d]+\//g, '')
-    .replace(/(then|else)\//g, '');
-  const segments = s.split('/');
-
-  const decodedSegments = segments.map(decode);
-
-  const startFromRoot = decodedSegments[0] === '#' || decodedSegments[0] === '';
-  const startIndex = startFromRoot ? 2 : 1;
-  return range(startIndex, decodedSegments.length, 2).map(
-    (idx) => decodedSegments[idx]
-  );
+  const segments = schemaPath.split('/').map(decode);
+  const startFromRoot = segments[0] === '#' || segments[0] === '';
+  const dataSegments: string[] = [];
+  // Walk the pointer segment by segment so that keywords are only skipped
+  // where a keyword is expected, never inside or in place of a property name
+  let i = startFromRoot ? 1 : 0;
+  while (i < segments.length) {
+    const segment = segments[i];
+    if (
+      (segment === 'anyOf' || segment === 'allOf' || segment === 'oneOf') &&
+      /^\d+$/.test(segments[i + 1] ?? '')
+    ) {
+      i += 2;
+    } else if (segment === 'then' || segment === 'else') {
+      i += 1;
+    } else {
+      if (i + 1 < segments.length) {
+        dataSegments.push(segments[i + 1]);
+      }
+      i += 2;
+    }
+  }
+  return dataSegments;
 };
 
 /**
