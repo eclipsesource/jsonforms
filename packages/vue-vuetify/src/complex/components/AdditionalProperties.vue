@@ -126,7 +126,6 @@ import { IsDynamicPropertyContext } from '@/util/inject';
 import {
   computed,
   defineComponent,
-  markRaw,
   provide,
   ref,
   unref,
@@ -433,12 +432,12 @@ export default defineComponent({
 
     return {
       validationMode: validationMode,
-      i18n: i18n ? markRaw(i18n) : i18n,
-      middleware: middleware ? markRaw(middleware) : middleware,
+      i18n,
+      middleware,
       t,
       mdAndUp,
       vuetifyProps,
-      ajv: ajv ? markRaw(ajv) : ajv,
+      ajv,
       control,
       styles,
       appliedOptions,
