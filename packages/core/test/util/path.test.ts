@@ -124,6 +124,12 @@ test('toDataPath keeps properties named like keywords', (t) => {
     'then.else'
   );
 });
+test('toDataPath drops a trailing combinator index', (t) => {
+  t.is(toDataPath('#/properties/a/anyOf/0'), 'a');
+  t.is(toDataPath('#/properties/a/oneOf/1'), 'a');
+  t.is(toDataPath('#/properties/a/allOf/2'), 'a');
+  t.is(toDataPath('#/properties/a/properties/b/anyOf/10'), 'a.b');
+});
 test('toDataPath use of encoded paths', (t) => {
   const fooBar = encodeURIComponent('foo.bar');
   t.is(toDataPath(`#/properties/${fooBar}`), `${fooBar}`);
