@@ -24,7 +24,7 @@
 */
 import test from 'ava';
 import { JsonSchema } from '../../src/models';
-import { Resolve, toDataPath } from '../../src';
+import { decode, Resolve, toDataPath } from '../../src';
 
 test('resolve ', (t) => {
   const schema: JsonSchema = {
@@ -156,6 +156,15 @@ test('toDataPath use of encoded paths relative without /', (t) => {
 });
 test('toDataPath use of encoded special character in pathname', (t) => {
   t.is(toDataPath('properties/foo~0bar~1baz'), 'foo~bar/baz');
+});
+test('decode replaces every escape in a segment', (t) => {
+  t.is(decode('a~0b~0c'), 'a~b~c');
+  t.is(decode('a~1b~1c'), 'a/b/c');
+  t.is(decode('~01'), '~1');
+});
+test('toDataPath decodes repeated escapes in a segment', (t) => {
+  t.is(toDataPath('#/properties/a~0b~0c'), 'a~b~c');
+  t.is(toDataPath('#/properties/a~1b~1c'), 'a/b/c');
 });
 test('resolve instance', (t) => {
   const instance = { foo: 123 };
