@@ -1,0 +1,47 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm' # also handles pnpm workspaces via pnpm-lock.yaml
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    # Disable regular version updates. Only security updates are opened.
+    # Security updates ignore this limit and are filtered by severity via
+    # Dependabot auto-triage rules in the repository settings:
+    #   - development dependencies: high or critical only
+    #   - production dependencies: moderate, high or critical only
+    open-pull-requests-limit: 0
+    # Disable Dependabot's labels (incl. defaults). Labels are added by
+    # .github/workflows/dependabot-labels.yaml (severity/*, dependencies/*).
+    labels: []
+    commit-message:
+      prefix: 'deps'
+    # Production security updates are intentionally not grouped: each fix gets
+    # its own PR so its severity stays visible.
+    # Only direct devDependencies end up in "dev-security": pnpm lockfile v9
+    # has no per-package dev flag, so Dependabot treats transitive dev
+    # dependencies as production and opens one PR per fix. Those PRs are still
+    # labeled dependencies/dev (from the alert scope) and
+    # dependencies/transitive by .github/workflows/dependabot-labels.yaml.
+    groups:
+      dev-security:
+        applies-to: security-updates
+        dependency-type: 'development'
+        patterns:
+          - '*'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    # Only security updates (see npm entry above for severity filtering).
+    open-pull-requests-limit: 0
+    # Labels (dependencies/ci, severity) are added by
+    # .github/workflows/dependabot-labels.yaml.
+    labels: []
+    commit-message:
+      prefix: 'ci'
+    groups:
+      actions-security:
+        applies-to: security-updates
+        patterns:
+          - '*'

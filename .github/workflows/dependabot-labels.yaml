@@ -1,0 +1,233 @@
+name: Dependabot labels
+
+# Labels Dependabot PRs:
+#   - severity/{low,moderate,high,critical,unknown}: highest severity of the
+#     open Dependabot alerts fixed by the PR (GitHub advisory severity, the
+#     same value the auto-triage rules filter on).
+#   - dependencies/{prod,dev,ci}: dependency category.
+#   - dependencies/transitive: at least one updated dependency is indirect.
+# Labels under severity/ and dependencies/ are owned by this workflow: they
+# are recomputed on every run and stale ones are removed.
+#
+# Dependabot-triggered pull_request runs get a read-only GITHUB_TOKEN by
+# default; the permissions block below raises it to what is needed. Plain
+# pull_request (not pull_request_target) is used so the job never runs with
+# base-repository privileges for untrusted PRs. No code from the PR is
+# checked out or executed.
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+# One run per PR at a time; a newer event supersedes an older run.
+concurrency:
+  group: dependabot-labels-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write # create labels
+  pull-requests: write # edit PR labels, list PR commits (fetch-metadata)
+  vulnerability-alerts: read # read Dependabot alerts (severity, scope)
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        # No alert-lookup: it provides neither severity nor scope, only reads
+        # the first 100 alerts and only matches the exact previous version.
+        # Alerts are queried via the REST API below instead.
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+        with:
+          github-token: ${{ github.token }}
+
+      - name: Update labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          ECOSYSTEM: ${{ steps.metadata.outputs.package-ecosystem }}
+          DEPENDENCY_GROUP: ${{ steps.metadata.outputs.dependency-group }}
+          UPDATED_DEPENDENCIES: ${{ steps.metadata.outputs.updated-dependencies-json }}
+        run: |
+          set -euo pipefail
+
+          deps="${UPDATED_DEPENDENCIES:-}"
+          [ -n "$deps" ] || deps='[]'
+
+          case "${ECOSYSTEM:-}" in
+            npm_and_yarn) alert_ecosystem=npm ;;
+            github_actions) alert_ecosystem=actions ;;
+            *) alert_ecosystem="" ;;
+          esac
+
+          # --- Open Dependabot alerts for the updated packages ---------------
+          # The ecosystem is filtered client-side: the API's ecosystem filter
+          # does not document "actions".
+          alerts='[]'
+          names=$(jq -r 'map(.dependencyName) | unique | join(",")' <<<"$deps")
+          if [ -n "$alert_ecosystem" ] && [ -n "$names" ]; then
+            if raw=$(gh api --method GET --paginate "repos/$GH_REPO/dependabot/alerts" \
+                  -f package="$names" -f state=open -f per_page=100 \
+                  --jq '.[] | {
+                    ecosystem: .dependency.package.ecosystem,
+                    package: .dependency.package.name,
+                    scope: .dependency.scope,
+                    severity: .security_advisory.severity,
+                    patched: .security_vulnerability.first_patched_version.identifier
+                  }'); then
+              alerts=$(jq -s --arg e "$alert_ecosystem" 'map(select(.ecosystem == $e))' <<<"$raw")
+            else
+              echo "::warning::Could not look up Dependabot alerts"
+            fi
+          fi
+
+          # Keep only alerts this PR fixes. An update of the package fixes an
+          # alert if it goes from below the patched version (if the previous
+          # version is known) to the patched version or above. A package can
+          # be updated several times (e.g. two versions of it in the
+          # lockfile); one matching update suffices. An update whose new
+          # version is not a plain version (e.g. a commit SHA) counts as
+          # fixing all alerts of the package; one without a new version is
+          # ignored.
+          version_le() {
+            [ "$(printf '%s\n%s\n' "$1" "$2" | sort -V | head -n1)" = "$1" ]
+          }
+          is_plain_version() {
+            [[ "$1" =~ ^[0-9]+(\.[0-9]+)*([-+].*)?$ ]]
+          }
+          fixed='[]'
+          while IFS= read -r alert; do
+            [ -n "$alert" ] || continue
+            pkg=$(jq -r '.package' <<<"$alert")
+            # Skip alerts for packages this PR does not update.
+            if ! jq -e --arg p "$pkg" 'any(.[]; .dependencyName == $p)' <<<"$deps" >/dev/null; then
+              continue
+            fi
+            patched=$(jq -r '.patched // ""' <<<"$alert")
+            patched=${patched#v}
+            # "prev|new" per update of the package.
+            updates=$(jq -r --arg p "$pkg" \
+              '.[] | select(.dependencyName == $p)
+                   | "\(.prevVersion // "")|\(.newVersion // "")"' <<<"$deps")
+            is_fixed=false
+            while IFS='|' read -r prev new; do
+              prev=${prev#v}
+              new=${new#v}
+              if [ -z "$new" ]; then
+                continue
+              fi
+              if ! is_plain_version "$new"; then
+                is_fixed=true
+                break
+              fi
+              if [ -z "$patched" ] || ! version_le "$patched" "$new"; then
+                continue
+              fi
+              # Already at or above the patched version before the update.
+              if [ -n "$prev" ] && is_plain_version "$prev" && version_le "$patched" "$prev"; then
+                continue
+              fi
+              is_fixed=true
+              break
+            done <<<"$updates"
+            if [ "$is_fixed" = true ]; then
+              fixed=$(jq -c --argjson a "$alert" '. + [$a]' <<<"$fixed")
+            fi
+          done < <(jq -c '.[]' <<<"$alerts")
+
+          labels=()
+
+          # --- Severity ------------------------------------------------------
+          severity=$(jq -r '
+            map(.severity) as $s
+            | first(("critical", "high", "medium", "low") | select(. as $l | any($s[]; . == $l)))
+              // "unknown"' <<<"$fixed")
+          # The API calls it "medium", GitHub's UI and auto-triage "moderate".
+          [ "$severity" != "medium" ] || severity=moderate
+          labels+=("severity/$severity")
+          if [ "$severity" = "unknown" ]; then
+            echo "::warning::Could not determine the severity of this PR"
+          fi
+
+          # --- Dependency category -------------------------------------------
+          if [ "${ECOSYSTEM:-}" = "github_actions" ]; then
+            labels+=("dependencies/ci")
+          elif [ "${ECOSYSTEM:-}" = "npm_and_yarn" ]; then
+            if [ "${DEPENDENCY_GROUP:-}" = "dev-security" ]; then
+              # Grouped by Dependabot as development (see dependabot.yml).
+              category=dev
+            else
+              # Scope of the fixed alerts, computed by the dependency graph
+              # (also for transitive dependencies). A package reachable from
+              # both dev and prod is "runtime".
+              category=$(jq -r '
+                if any(.[]; .scope == "runtime") then "prod"
+                elif any(.[]; .scope == "development") then "dev"
+                else "" end' <<<"$fixed")
+              if [ -z "$category" ]; then
+                # No alert scope: fall back to Dependabot's dependency types.
+                # Indirect dependencies are counted as prod to be safe.
+                if jq -e 'length > 0 and all(.[]; .dependencyType == "direct:development")' \
+                    <<<"$deps" >/dev/null; then
+                  category=dev
+                else
+                  category=prod
+                fi
+              fi
+            fi
+            labels+=("dependencies/$category")
+
+            if jq -e 'any(.[]; .dependencyType == "indirect")' <<<"$deps" >/dev/null; then
+              labels+=("dependencies/transitive")
+            fi
+          fi
+
+          echo "Labels: ${labels[*]}"
+
+          # --- Apply ---------------------------------------------------------
+          declare -A colors=(
+            ["severity/low"]="c5def5"
+            ["severity/moderate"]="fbca04"
+            ["severity/high"]="d93f0b"
+            ["severity/critical"]="b60205"
+            ["severity/unknown"]="ededed"
+            ["dependencies/dev"]="bfdadc"
+            ["dependencies/prod"]="0e8a16"
+            ["dependencies/ci"]="1d76db"
+            ["dependencies/transitive"]="d4c5f9"
+          )
+
+          # GitHub label names are case-insensitive, so all comparisons are.
+          existing=$(gh label list --limit 1000 --json name --jq '.[].name')
+          for label in "${labels[@]}"; do
+            if ! grep -Fxqi -- "$label" <<<"$existing"; then
+              # May fail if a concurrent run just created it; gh pr edit
+              # below fails loudly if the label really is missing.
+              gh label create "$label" --color "${colors[$label]}" \
+                || echo "::warning::Could not create label $label"
+            fi
+          done
+
+          # Remove stale labels owned by this workflow (e.g. after Dependabot
+          # updated the PR), then add the current ones in a single call.
+          # Captured first so that a failing gh call fails the job.
+          current=$(gh pr view "$PR_NUMBER" --json labels --jq '.labels[].name')
+          declare -A wanted=()
+          for label in "${labels[@]}"; do wanted["${label,,}"]=1; done
+          remove=()
+          while IFS= read -r label; do
+            lower=${label,,}
+            if [[ "$lower" =~ ^(severity|dependencies)/ ]] && [ -z "${wanted[$lower]:-}" ]; then
+              remove+=("$label")
+            fi
+          done <<<"$current"
+
+          args=(--add-label "$(IFS=,; echo "${labels[*]}")")
+          if [ ${#remove[@]} -gt 0 ]; then
+            args+=(--remove-label "$(IFS=,; echo "${remove[*]}")")
+          fi
+          gh pr edit "$PR_NUMBER" "${args[@]}"
