@@ -1778,6 +1778,172 @@ test('mapStateToAnyOfProps - const constraint in anyOf schema should return corr
   t.is(props.indexOfFittingSchema, 2);
 });
 
+test('mapStateToOneOfProps - indexOfFittingSchema selects the branch whose required properties are present', (t) => {
+  const uischema: ControlElement = { type: 'Control', scope: '#' };
+  const schema: JsonSchema7 = {
+    oneOf: [
+      {
+        type: 'object',
+        properties: { iban: { type: 'string' } },
+        required: ['iban'],
+      },
+      {
+        type: 'object',
+        properties: { cardNumber: { type: 'string' } },
+        required: ['cardNumber'],
+      },
+    ],
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema,
+        data: { cardNumber: '4111' },
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToOneOfProps(state, { uischema });
+  t.is(props.indexOfFittingSchema, 1);
+});
+
+test('mapStateToOneOfProps - indexOfFittingSchema honours additionalProperties: false', (t) => {
+  const uischema: ControlElement = { type: 'Control', scope: '#' };
+  const schema: JsonSchema7 = {
+    oneOf: [
+      {
+        type: 'object',
+        properties: { name: { type: 'string' } },
+        additionalProperties: false,
+      },
+      {
+        type: 'object',
+        properties: { name: { type: 'string' }, age: { type: 'integer' } },
+      },
+    ],
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema,
+        data: { name: 'Ada', age: 36 },
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToOneOfProps(state, { uischema });
+  t.is(props.indexOfFittingSchema, 1);
+});
+
+test('mapStateToAnyOfProps - indexOfFittingSchema selects by primitive type', (t) => {
+  const uischema: ControlElement = { type: 'Control', scope: '#' };
+  const schema: JsonSchema7 = {
+    anyOf: [{ type: 'string' }, { type: 'number' }, { type: 'boolean' }],
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema,
+        data: true,
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToAnyOfProps(state, { uischema });
+  t.is(props.indexOfFittingSchema, 2);
+});
+
+test('mapStateToOneOfProps - indexOfFittingSchema resolves $ref branches against the root schema', (t) => {
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/pet',
+  };
+  const schema: JsonSchema7 = {
+    type: 'object',
+    properties: {
+      pet: {
+        oneOf: [{ $ref: '#/definitions/cat' }, { $ref: '#/definitions/dog' }],
+      },
+    },
+    definitions: {
+      cat: {
+        type: 'object',
+        properties: { kind: { const: 'cat' } },
+        required: ['kind'],
+      },
+      dog: {
+        type: 'object',
+        properties: { kind: { const: 'dog' } },
+        required: ['kind'],
+      },
+    },
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema,
+        data: { pet: { kind: 'dog' } },
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToOneOfProps(state, { uischema });
+  t.is(props.indexOfFittingSchema, 1);
+});
+
+test('mapStateToOneOfProps - indexOfFittingSchema works without an ajv instance in state', (t) => {
+  const uischema: ControlElement = { type: 'Control', scope: '#' };
+  const schema: JsonSchema7 = {
+    oneOf: [
+      { type: 'object', properties: { kind: { const: 'a' } } },
+      { type: 'object', properties: { kind: { const: 'b' } } },
+    ],
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema,
+        data: { kind: 'b' },
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToOneOfProps(state, { uischema });
+  t.is(props.indexOfFittingSchema, 1);
+});
+
+test('mapStateToOneOfProps - indexOfFittingSchema is undefined when no branch fits', (t) => {
+  const uischema: ControlElement = { type: 'Control', scope: '#' };
+  const schema: JsonSchema7 = {
+    oneOf: [
+      { type: 'object', properties: { kind: { const: 'a' } } },
+      { type: 'object', properties: { kind: { const: 'b' } } },
+    ],
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        ajv: createAjv(),
+        schema,
+        data: { kind: 'c' },
+        uischema,
+        errors: [] as ErrorObject[],
+      },
+    },
+  };
+  const props = mapStateToOneOfProps(state, { uischema });
+  t.is(props.indexOfFittingSchema, undefined);
+});
+
 test('mapStateToControlProps - i18n - mapStateToControlProps should not crash without i18n', (t) => {
   const ownProps = {
     uischema: coreUISchema,

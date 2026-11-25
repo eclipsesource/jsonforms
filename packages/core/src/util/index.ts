@@ -34,6 +34,7 @@ export * from './schema';
 export * from './uischema';
 export * from './util';
 export * from './validator';
+export * from './structural';
 export * from './defaultDateFormat';
 export * from './errors';
 export * from './helpers';
