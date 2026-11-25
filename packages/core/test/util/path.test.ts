@@ -24,7 +24,7 @@
 */
 import test from 'ava';
 import { JsonSchema } from '../../src/models';
-import { Resolve, toDataPath } from '../../src';
+import { decode, Resolve, toDataPath } from '../../src';
 
 test('resolve ', (t) => {
   const schema: JsonSchema = {
@@ -108,6 +108,28 @@ test('toDataPath replace all combinators', (t) => {
 test('toDataPath use of keywords', (t) => {
   t.is(toDataPath('#/properties/properties'), 'properties');
 });
+test('toDataPath keeps property names ending in then or else', (t) => {
+  t.is(
+    toDataPath('#/properties/something_else/properties/name'),
+    'something_else.name'
+  );
+  t.is(toDataPath('#/properties/strengthen/properties/x'), 'strengthen.x');
+});
+test('toDataPath keeps properties named like keywords', (t) => {
+  t.is(toDataPath('#/properties/then/properties/name'), 'then.name');
+  t.is(toDataPath('#/properties/else/properties/name'), 'else.name');
+  t.is(toDataPath('#/properties/anyOf/properties/0'), 'anyOf.0');
+  t.is(
+    toDataPath('/anyOf/1/then/properties/then/properties/else'),
+    'then.else'
+  );
+});
+test('toDataPath drops a trailing combinator index', (t) => {
+  t.is(toDataPath('#/properties/a/anyOf/0'), 'a');
+  t.is(toDataPath('#/properties/a/oneOf/1'), 'a');
+  t.is(toDataPath('#/properties/a/allOf/2'), 'a');
+  t.is(toDataPath('#/properties/a/properties/b/anyOf/10'), 'a.b');
+});
 test('toDataPath use of encoded paths', (t) => {
   const fooBar = encodeURIComponent('foo.bar');
   t.is(toDataPath(`#/properties/${fooBar}`), `${fooBar}`);
@@ -134,6 +156,15 @@ test('toDataPath use of encoded paths relative without /', (t) => {
 });
 test('toDataPath use of encoded special character in pathname', (t) => {
   t.is(toDataPath('properties/foo~0bar~1baz'), 'foo~bar/baz');
+});
+test('decode replaces every escape in a segment', (t) => {
+  t.is(decode('a~0b~0c'), 'a~b~c');
+  t.is(decode('a~1b~1c'), 'a/b/c');
+  t.is(decode('~01'), '~1');
+});
+test('toDataPath decodes repeated escapes in a segment', (t) => {
+  t.is(toDataPath('#/properties/a~0b~0c'), 'a~b~c');
+  t.is(toDataPath('#/properties/a~1b~1c'), 'a/b/c');
 });
 test('resolve instance', (t) => {
   const instance = { foo: 123 };
